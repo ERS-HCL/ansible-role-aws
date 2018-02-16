@@ -21,22 +21,28 @@ Available Variables are listed below, they can be defined for all the
 instances in the default/main.yml or individually in the inventory file.
 
    AWS region where the EC2 instance has to be created
+
      aws_region: ap-south-1
 
    AWS instance type to specify the CPU and memory requirement
+
      instance_type: t2.micro
 
    AWS image ID to identify the OS and host the machine
+
      image_id: ami-ac1e68c3
 
    AWS security group the instances will be attached to.
    if it is not available already, new group will be created with limited access
+
      security_group_name: "security123"
 
    AWS Key pair to connect to the AWS instance, create it manually.
+
      sshkeypair_name: my_key
 
    AWS EBS storage disk size to be provisioned in GB
+
       disk: 10
 
 
