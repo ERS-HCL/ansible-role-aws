@@ -1,7 +1,7 @@
 ansible-role-aws
 ================
 
-An Ansible role that creates EC2 instances, Security groups and groups them under resourcegroup in AWS cloud environment. 
+An Ansible role that creates EC2 instances, Security groups in AWS cloud environment. 
 Public DNS names of the EC2 instances are updated in the inventory file for further use in other roles/playbook.
 
 This role has the support for delete,stop and start the EC2 instances apart from create.
@@ -49,6 +49,7 @@ Example Playbook
 ----------------
 
 Creating EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -58,6 +59,7 @@ Creating EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Starting EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -67,6 +69,7 @@ Starting EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Stoping  EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -76,6 +79,7 @@ Stoping  EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Deleting  EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
