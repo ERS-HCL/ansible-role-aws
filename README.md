@@ -62,7 +62,7 @@ Creating EC2 instances in AWS cloud.
 	    operation: createhosts
 
 	  roles:
-	    - ansible-role-aws
+	    - SathiyarajPeriyannan.aws
 
 Starting EC2 instances in AWS cloud.
 
@@ -72,7 +72,7 @@ Starting EC2 instances in AWS cloud.
 	    operation: starthosts
 
 	  roles:
-	    - ansible-role-aws
+	    - SathiyarajPeriyannan.aws
 
 Stoping  EC2 instances in AWS cloud.
 
@@ -82,7 +82,7 @@ Stoping  EC2 instances in AWS cloud.
 	    operation: stophosts
 
 	  roles:
-	    - ansible-role-aws
+	    - SathiyarajPeriyannan.aws
 
 Deleting  EC2 instances in AWS cloud.
 
@@ -92,7 +92,7 @@ Deleting  EC2 instances in AWS cloud.
 	    operation: deletehosts
 
 	  roles:
-	    - ansible-role-aws
+	    - SathiyarajPeriyannan.aws
 
 License
 -------
