@@ -1,2 +1,2 @@
 [instances]
-ansibevm1 aws_region=ap-south-1 security_group_name="security123" sshkeypair_name=my_key instance_type=t2.micro image_id=ami-ac1e68c3 resource_group_name="IntegrationEnv" disk=10
+ansibevm1 ansible_host=ec2-13-127-182-154.ap-south-1.compute.amazonaws.com aws_region=ap-south-1 security_group_name="security123" sshkeypair_name=my_key instance_type=t2.micro image_id=ami-ac1e68c3 disk=10

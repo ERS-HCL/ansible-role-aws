@@ -2,7 +2,7 @@
 # Testing different operations
 #
 - hosts: instances
-  remote_user: root
+  connection: local
   vars: 
     operation: createhosts
 
@@ -10,7 +10,7 @@
     - ansible-role-aws
 
 - hosts: instances
-  remote_user: root
+  connection: local
   vars: 
     operation: starthosts
 
@@ -18,7 +18,7 @@
     - ansible-role-aws
 
 - hosts: instances
-  remote_user: root
+  connection: local
   vars: 
     operation: stophosts
 
@@ -26,7 +26,7 @@
     - ansible-role-aws
 
 - hosts: instances
-  remote_user: root
+  connection: local
   vars: 
     operation: deletehosts
 

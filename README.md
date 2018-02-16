@@ -51,7 +51,7 @@ Example Playbook
 Creating EC2 instances in AWS cloud.
 
 	- hosts: instances
-	  remote_user: root
+	  connection: local
 	  vars:
 	    operation: createhosts
 
@@ -61,7 +61,7 @@ Creating EC2 instances in AWS cloud.
 Starting EC2 instances in AWS cloud.
 
 	- hosts: instances
-	  remote_user: root
+	  connection: local
 	  vars:
 	    operation: starthosts
 
@@ -71,7 +71,7 @@ Starting EC2 instances in AWS cloud.
 Stoping  EC2 instances in AWS cloud.
 
 	- hosts: instances
-	  remote_user: root
+	  connection: local
 	  vars:
 	    operation: stophosts
 
@@ -81,7 +81,7 @@ Stoping  EC2 instances in AWS cloud.
 Deleting  EC2 instances in AWS cloud.
 
 	- hosts: instances
-	  remote_user: root
+	  connection: local
 	  vars:
 	    operation: deletehosts
 

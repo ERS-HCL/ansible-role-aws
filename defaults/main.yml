@@ -19,8 +19,6 @@ instance_type: t2.micro
 # AWS image ID to host the machine
 image_id: ami-ac1e68c3 
 
-# AWS resourcegroup name the created instances will be linked to
-resource_group_name: "IntegrationEnv" 
 
 # AWS storage disk size to be provisioned in GB
 disk: 10 
