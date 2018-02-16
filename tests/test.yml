@@ -1,0 +1,35 @@
+---
+# Testing different operations
+#
+- hosts: instances
+  remote_user: root
+  vars: 
+    operation: createhosts
+
+  roles:
+    - ansible-role-aws
+
+- hosts: instances
+  remote_user: root
+  vars: 
+    operation: starthosts
+
+  roles:
+    - ansible-role-aws
+
+- hosts: instances
+  remote_user: root
+  vars: 
+    operation: stophosts
+
+  roles:
+    - ansible-role-aws
+
+- hosts: instances
+  remote_user: root
+  vars: 
+    operation: deletehosts
+
+  roles:
+    - ansible-role-aws
+

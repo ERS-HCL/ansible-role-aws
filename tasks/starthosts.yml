@@ -1,0 +1,40 @@
+---
+# tasks file for aws stop hosts
+
+ - name: collect running instances and collect the IDs
+   ec2_instance_facts:
+     filters:
+       instance-state-name: "running"
+       "tag:Name": "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+   register: ec2_running
+
+ - debug:
+     var: ec2_running
+
+ - name: collect stopped instances and collect the IDs
+   ec2_instance_facts:
+     filters:
+       instance-state-name: "stopped"
+       "tag:Name": "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+   register: ec2_stopped
+
+ - debug:
+     var: ec2_stopped
+
+ - name: start the stopped instances 
+   ec2:
+     instance_ids: "{{ ec2_stopped['instances'][0]['instance_id'] }}"
+     instance_tags:
+       Name: "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+     state: running
+     wait: True
+   when:  ec2_stopped['instances'][0] is defined and ec2_stopped['instances'][0]['instance_id'] is defined
+   register: ec2
+   ignore_errors: true
+
+ - debug:
+     var: ec2
+

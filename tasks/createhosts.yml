@@ -1,0 +1,119 @@
+---
+# tasks file for aws create hosts
+#
+ - name: set the default value of fqdn and state as none and Error
+   set_fact:
+     fqdn: "None"
+
+ - name: Create the security Group
+   ec2_group:
+     name: "{{ security_group_name }}"
+     description: Security group created using ansible
+     region: "{{ aws_region }}"
+     rules:
+       - proto: tcp
+         from_port: 80
+         to_port: 80
+         cidr_ip: 0.0.0.0/0
+       - proto: tcp
+         from_port: 8080
+         to_port: 8080
+         cidr_ip: 0.0.0.0/0
+       - proto: tcp
+         from_port: 22
+         to_port: 22
+         cidr_ip: 0.0.0.0/0
+       - proto: all
+         from_port: all
+         to_port: all
+         group_name: "{{ security_group_name }}"
+     rules_egress:
+       - proto: all
+         cidr_ip: 0.0.0.0/0
+   run_once: true
+
+# AWS is not starting the stopped instance and creates new instance, avoid new instance
+# by first checking and starting it if present
+ - name: Check if the machine instance is already available and in stopped state
+   ec2_instance_facts:
+     filters:
+       instance-state-name: stopped
+       "tag:Name": "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+   register: ec2
+
+ - debug:
+     var: ec2
+
+ - name: start the stopped instances if already present
+   ec2:
+     instance_ids: "{{ ec2['instances'][0]['instance_id'] }}"
+     instance_tags:
+       Name: "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+     state: running
+     wait: True
+   when:  ec2['instances'][0] is defined and ec2['instances'][0]['instance_id'] is defined
+   register: ec2
+
+ - name: Provision the instances
+   ec2:
+      key_name: "{{ sshkeypair_name }}"
+      instance_type: "{{ instance_type }}"
+      image: "{{ image_id }}"
+      region: "{{ aws_region }}"
+      wait: true
+      group: "{{ security_group_name }}"
+      instance_tags:
+         Name: "{{ inventory_hostname }}"
+         Group: "{{ resource_group_name }}"
+      exact_count: 1
+      count_tag:
+         Name: "{{ inventory_hostname }}"
+      volumes:
+        - device_name: /dev/sda1
+          volume_type: gp2
+          volume_size: "{{ disk }}"
+          delete_on_termination: true
+   register: ec2
+
+ - name: Wait for SSH to come up
+   wait_for: host="{{ item.public_dns_name }}" port=22 delay=60 timeout=600 state=started
+   with_items: "{{ ec2.instances }}"
+
+
+ - name: Displying the Hostnames
+   debug: msg="Hostnames {{ ec2['tagged_instances'][0]['dns_name'] }}"
+   
+ - name: set the fqdn and state as fact
+   set_fact:
+     fqdn: "{{ ec2['tagged_instances'][0]['dns_name'] }}"
+
+   
+ - debug:
+     var: ec2
+
+  # ?! neagetes the search of ansible_ssh_host if it is already replaced - idempotent
+  # # # .* matching is preserved for reuse in the line: as \1
+
+ - name: Add the acquired Hostname to the inventory file for each virtual machine
+   lineinfile:
+     dest: "{{ inventory_file }}"
+     regexp: "^{{ item  }} (?!ansible_host=)(.*)"
+     line: '{{ item }} ansible_host={{ hostvars[item]["fqdn"] }} \1'
+     backrefs: True
+     state: present
+   with_items: "{{ groups['hosts'] }}"
+   run_once: True
+
+ - name: Replace the Hostname in the inventory file if changed
+   lineinfile:
+     dest: "{{ inventory_file }}"
+     regexp: '^{{ inventory_hostname }} ansible_host=(?!{{ ec2["tagged_instances"][0]["dns_name"] }})(\w+)\s+(.*)$'
+     line: '{{ inventory_hostname }} ansible_host={{ ec2["tagged_instances"][0]["dns_name"] }} \2'
+     backrefs: True
+     state: present
+
+ - name: Clean the known_hosts file
+   known_hosts: name="{{ ec2['tagged_instances'][0]['dns_name'] }}" state=absent
+

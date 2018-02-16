@@ -1,0 +1,40 @@
+galaxy_info:
+  author: Sathiyaraj Periyannan
+  description: EC2 instance create, delete, stop and start in AWS Cloud
+  company: HCL Technologies Ltd
+  license: license (GPLv2, CC-BY, etc)
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: GenericLinux
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+
+  galaxy_tags:
+    - aws
+    - ec2
+    - automation
+    - cloud
+    - virtualization
+    - virtualmachine
+    - devops
+    - machine provisioning
+    - infra provisioning
+    - infrastructure as code
+    - create
+    - delete
+    - start
+    - stop
+
+dependencies: []

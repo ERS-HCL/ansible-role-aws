@@ -1,0 +1,63 @@
+---
+# tasks file for aws delete
+ - name: Collect running instances and collect the IDs
+   ec2_instance_facts:
+     filters:
+       instance-state-name: "running"
+       "tag:Name": "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+   register: ec2_running
+
+ - debug:
+     var: ec2_running
+
+ - name: collect stopped instances and collect the IDs
+   ec2_instance_facts:
+     filters:
+       instance-state-name: "stopped"
+       "tag:Name": "{{ inventory_hostname }}"
+     region: "{{ aws_region }}"
+   register: ec2_stopped
+
+ - debug:
+     var: ec2_stopped
+
+ - name: Delete the stopped instances
+   ec2:
+      key_name: "{{ ec2_stopped['instances'][0]['key_name'] }}"
+      wait: true
+      instance_ids: "{{ ec2_stopped['instances'][0]['instance_id'] }}"
+      instance_tags:
+         Name: "{{ inventory_hostname }}"
+      state: 'absent'
+      region: "{{ aws_region }}"
+   when: ec2_stopped['instances'][0] is defined and ec2_stopped['instances'][0]['instance_id'] is defined
+   register: ec2_stopped
+   ignore_errors: true
+
+ - debug: 
+     var: ec2_stopped
+
+ - name: Delete the running  instances
+   ec2:
+      key_name: "{{ ec2_running['instances'][0]['key_name'] }}"
+      wait: true
+      instance_ids: "{{ ec2_running['instances'][0]['instance_id'] }}"
+      instance_tags:
+         Name: "{{ inventory_hostname }}"
+      state: 'absent'
+      region: "{{ aws_region }}"
+   when:  ec2_running['instances'][0] is defined and ec2_running['instances'][0]['instance_id'] is defined
+   register: ec2_running
+   ignore_errors: true
+
+ - debug:
+     var: ec2_running
+
+ - name: Delete security Group
+   ec2_group:
+     name: "{{ security_group_name }}"
+     state: 'absent'
+     region: "{{ aws_region }}"
+   ignore_errors: true
+
