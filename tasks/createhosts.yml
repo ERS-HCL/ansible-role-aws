@@ -103,7 +103,7 @@
      line: '{{ item }} ansible_host={{ hostvars[item]["fqdn"] }} \1'
      backrefs: True
      state: present
-   with_items: "{{ groups['hosts'] }}"
+   with_items: "{{ groups['instances'] }}"
    run_once: True
 
  - name: Replace the Hostname in the inventory file if changed
