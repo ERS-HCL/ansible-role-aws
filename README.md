@@ -49,6 +49,7 @@ Example Playbook
 ----------------
 
 Creating EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -58,6 +59,7 @@ Creating EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Starting EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -67,6 +69,7 @@ Starting EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Stoping  EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
@@ -76,6 +79,7 @@ Stoping  EC2 instances in AWS cloud.
 	    - ansible-role-aws
 
 Deleting  EC2 instances in AWS cloud.
+
 	- hosts: instances
 	  remote_user: root
 	  vars:
